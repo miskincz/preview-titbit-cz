@@ -1,0 +1,206 @@
+@use 'variables' as *;
+@use 'typography' as *;
+// Struktura rozvržení stránky
+.header {
+  &::before {
+    content: "";
+    display: block;
+    height: 19px; width: 100%;
+    background-image: url('../assets/img/bg_header.png');
+    background-size: cover;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .header__container {
+    padding: .5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-logo {
+    width: 10.1875rem;
+    text-align: center;
+    a {
+      text-decoration: none;
+    }
+    span {
+      display: block;
+      color: #095352;
+      text-align: center;
+      font-size: 0.625rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+  }
+  &__nav {
+    display: flex;
+    align-items: center;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      gap: 1rem 2rem;
+    }
+    a {
+      color: $color-text;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    &__eshop {
+      margin: 0 2rem;
+      overflow: hidden;
+    }
+  }
+}
+
+/*mainNav */
+.mainNav {
+  background-color: #fff;
+  padding: 0;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 1rem 2rem;
+    justify-content: center;
+    li {
+      position: relative; // enable positioning of submenu
+      a {
+        color: $color-text;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 1.5rem 0;
+        display: block; 
+        &:hover {
+          color: #095352;
+        }
+      }
+      // skryté první úroveň podmenu
+      ul {
+        display: none;
+        position: absolute;
+        z-index: 999;
+        top: 100%;
+        left: -1.5rem;
+        width: max-content;
+        white-space: nowrap;
+        background: #fff;
+        list-style: none;
+        margin: 0;
+        padding: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        li {
+          a {
+            padding: .5rem 1rem;
+            display: block;
+          }
+        }
+      }
+      &:hover > ul {
+        display: block; // zobrazí submenu na hover
+      }
+      // indikátor a styl pro položky s podmenu
+      &.current-menu-item a {
+        color: $color-primary;
+      }
+      &.menu-item-has-children {
+        > a {
+          &::after {
+            content: "";
+            margin-left: .35rem;
+            display: inline-block;
+            width: 10px; height: 6px;
+            background-image: url('../assets/img/ico_submenu.png');
+            position: relative;
+            top: -2px;
+            transition: transform 0.3s ease;
+          }
+          &:hover::after {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  } 
+
+  // zakázat třetí úroveň submenu
+  ul ul ul {
+    display: none !important;
+  }
+
+  // skrýt šipku u položek 2. úrovně, které by otevíraly 3. úroveň
+  ul ul li.menu-item-has-children > a::after {
+    content: none !important;
+  }
+}
+
+.siteContainer {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+ /* footer */
+.footer {
+  background-color: #fff;
+  &__content {
+    background-color: #fff
+  }
+  &__container {
+    padding: 2rem 0;
+    display: flex;
+    gap: 1rem;
+    line-height: 1.5rem;
+    @extend .font-small;
+    h4 {
+      font-weight: normal;
+      margin: 0 0 .3rem 0;
+      text-transform: uppercase;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      a {
+        color: $color-text;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    &__col1 {
+      width: 23%;
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+    &__col2 {
+      width: 23%;
+    }
+    &__col3 {
+      width: 18%;
+    }
+    &__col4 {
+      width: 18%;
+    }
+    &__col5 {
+      width: 18%;
+    }
+  }
+  &__copyright {
+    @extend .font-small;
+    background-color: #095352;
+    color: #fff;
+    padding: .7rem 0;
+    margin: 0;
+  }
+}

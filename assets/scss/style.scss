@@ -1,0 +1,16 @@
+// Hlavní SCSS soubor, který importuje všechny ostatní
+
+@use "variables" as *;
+@use "typography" as *;
+@use "mixins";
+@use "base";
+@use "buttons";
+@use "grid";
+@use "layout";
+@use "components";
+@use "blocks";
+@use "sections";
+@use "article";
+@use "products";
+@use "gallery";
+@use "blog";

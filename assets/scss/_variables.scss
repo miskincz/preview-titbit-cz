@@ -1,0 +1,19 @@
+// SCSS proměnné
+$color-primary: #095352;
+$color-secondary: #FF087F;
+$color-text: #333333;
+$color-text-white: #EFEAE2;
+$color-bg-neutral: #EFEAE3;
+$font-stack: 'Helvetica, sans-serif';
+$border-radius: 8px;
+
+// Grid system
+$container-max-width: 1440px;
+$container-padding: 1rem;
+$grid-gap: 1rem;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

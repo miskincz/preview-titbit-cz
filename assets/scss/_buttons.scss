@@ -1,0 +1,200 @@
+@use 'variables' as *;
+@use 'sass:color';
+@use 'mixins' as *;
+
+/**
+ * TLAČÍTKA - Základní styly
+ * 
+ * POUŽITÍ:
+ * <button class="btn">Základní tlačítko</button>
+ * <a href="#" class="btn btn--primary">Primární tlačítko</a>
+ * <button class="btn btn--secondary">Sekundární tlačítko</button>
+ * <button class="btn btn--outline">Obrysové tlačítko</button>
+ * <button class="btn btn--small">Malé tlačítko</button>
+ * <button class="btn btn--large">Velké tlačítko</button>
+ * <button class="btn btn--full">Tlačítko na celou šířku</button>
+ */
+
+.btn {
+  display: inline-block;
+  padding: 0.70rem 1.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  background-color: $color-primary;
+  color: #fff;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:focus {
+    outline: 2px solid $color-secondary;
+    outline-offset: 2px;
+  }
+  
+  &:disabled,
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// Varianty barev
+.btn--primary {
+  background-color: $color-secondary;
+  color: $color-text-white;
+  &:hover {
+    background-color: color.scale($color-secondary, $lightness: -10%);
+  }
+}
+
+.btn--secondary {
+  background-color: $color-secondary;
+  color: #fff;
+  
+  &:hover {
+    background-color: color.scale($color-secondary, $lightness: -10%);
+  }
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: $color-primary;
+  border-color: $color-primary;
+  
+  &:hover {
+    background-color: $color-primary;
+    color: #fff;
+  }
+}
+
+.btn--outline-secondary {
+  background-color: transparent;
+  color: $color-secondary;
+  border-color: $color-secondary;
+  
+  &:hover {
+    background-color: $color-secondary;
+    color: #fff;
+  }
+}
+
+.btn--white {
+  background-color: #fff;
+  color: $color-primary;
+  
+  &:hover {
+    background-color: color.scale(#fff, $lightness: -5%);
+  }
+}
+
+.btn--dark {
+  background-color: $color-text;
+  color: #fff;
+  
+  &:hover {
+    background-color: color.scale($color-text, $lightness: 10%);
+  }
+}
+
+// Velikosti
+.btn--small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn--large {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.btn--full {
+  width: 100%;
+  display: block;
+}
+
+
+
+// Ikony v tlačítkách
+.btn--icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  svg,
+  i {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+// Skupina tlačítek
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  
+  &--center {
+    justify-content: center;
+  }
+  
+  &--end {
+    justify-content: flex-end;
+  }
+}
+
+// Responzivita
+@media (max-width: $breakpoint-sm) {
+  .btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+  
+  .btn--large {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+}
+
+// Tlačítko s labelem - pro kategorie a seznamy
+@mixin hoverArrowEffect {
+  font-weight: bold;
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 15px;
+    height: 9px;
+    margin-left: 8px;
+    background-image: url('data:image/svg+xml,<svg width="18" height="11" viewBox="0 0 18 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5001 5.49999L12.3334 1.33332M16.5001 5.49999L12.3334 9.66666M16.5001 5.49999L1.5001 5.49999" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-size: cover;
+    background-color: $color-bg-neutral;
+  }
+}
+
+.btn--block {
+  display: inline-block;
+  background-color: $color-bg-neutral;
+  padding: 0.5rem 1rem;
+  border-radius: $border-radius;
+  color: $color-text;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  &:hover {
+    @include hoverArrowEffect;
+  }
+}

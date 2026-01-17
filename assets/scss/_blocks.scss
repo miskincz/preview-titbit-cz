@@ -1,0 +1,52 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.block__spoluprace {
+    background-color: $color-primary;
+    color: $color-text-white;
+    text-align: center;
+    padding: 1rem 2rem;
+    height: 208px;
+    margin-bottom: 2rem;
+    h4 {
+        color: #C6D218;
+        @extend .title--headingUpp;
+        margin: 0 0 .5rem 0;
+    }
+    h5 {
+        @extend .title--h2;
+        color: #EFEAE2;
+        margin: 0;
+    }
+}
+
+.block__zasobujemerestaurace {
+    background-color: #E1CEC0;
+    color: $color-text;
+    height: 208px;
+    display: flex;
+    &__img {
+        height: 208px;
+        img {
+            display: block;
+            width: 100%;
+            max-width: 382px;
+        }
+    }
+    &__text {
+        padding: 1rem 1rem 0 2rem;
+        h4 {
+            @extend .title--headingUpp;
+            margin: 0 0 1rem 0;
+        }
+        ul {
+            line-height: 1.2;
+            li {
+                margin-top: 0;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+    }
+}

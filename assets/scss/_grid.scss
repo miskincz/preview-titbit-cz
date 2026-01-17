@@ -1,0 +1,144 @@
+@use 'variables' as *;
+
+/**
+ * GRID SYSTÉM - Návod k použití
+ * 
+ * CONTAINER:
+ * <div class="container">               // Standardní container (max 1440px)
+ * <div class="container--fluid">        // Full width container
+ * <div class="container--narrow">       // Úzký container (max 900px)
+ * 
+ * ZÁKLADNÍ GRID:
+ * <div class="grid grid--col-2">        // 2 sloupce
+ * <div class="grid grid--col-3">        // 3 sloupce
+ * <div class="grid grid--col-4">        // 4 sloupce
+ * <div class="grid grid--col-6">        // 6 sloupců
+ * 
+ * AUTO-FIT GRID (responzivní):
+ * <div class="grid grid--auto">         // Auto sloupce (min 250px)
+ * <div class="grid grid--auto-sm">      // Auto sloupce (min 200px)
+ * <div class="grid grid--auto-lg">      // Auto sloupce (min 300px)
+ * 
+ * GAP (mezery):
+ * <div class="grid grid--col-3 grid--gap-sm">   // Malé mezery (0.5rem)
+ * <div class="grid grid--col-3 grid--gap-lg">   // Velké mezery (2rem)
+ * 
+ * GRID ITEMS:
+ * <div class="grid__item--span-2">      // Položka přes 2 sloupce
+ * <div class="grid__item--full">        // Položka přes všechny sloupce
+ * 
+ * PŘÍKLAD SPRÁVNÉHO POUŽITÍ:
+ * <div class="grid grid--col-6">
+ *   <div>Položka 1</div>
+ *   <div>Položka 2</div>
+ *   <div class="grid__item--span-2">Položka 3 (2 sloupce)</div>
+ * </div>
+ * 
+ * FLEX GRID (alternativa):
+ * <div class="flex-grid">
+ *   <div class="flex-grid__item">Item</div>
+ *   <div class="flex-grid__item--1-3">1/3 šířky</div>
+ * </div>
+ */
+
+// Container
+.container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $container-padding;
+  box-sizing: border-box;
+}
+
+.container--fluid {
+  max-width: 100%;
+}
+
+.container--narrow {
+  max-width: 900px;
+}
+
+// Grid system
+.grid {
+  display: grid;
+  gap: $grid-gap;
+  
+  &--col-1 { grid-template-columns: 1fr; }
+  &--col-2 { grid-template-columns: repeat(2, 1fr); }
+  &--col-3 { grid-template-columns: repeat(3, 1fr); }
+  &--col-4 { grid-template-columns: repeat(4, 1fr); }
+  &--col-5 { grid-template-columns: repeat(5, 1fr); }
+  &--col-6 { grid-template-columns: repeat(6, 1fr); }
+  
+  // Auto-fit s min šířkou
+  &--auto { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  &--auto-sm { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  &--auto-lg { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  
+  // Gap varianty
+  &--gap-sm { gap: 0.5rem; }
+  &--gap-md { gap: 1.5rem; }
+  &--gap-lg { gap: 2rem; }
+  &--gap-xl { gap: 3rem; }
+  
+  // Zarovnání
+  &--center { align-items: center; justify-items: center; }
+  &--start { align-items: start; justify-items: start; }
+  &--end { align-items: end; justify-items: end; }
+}
+
+// Grid items
+.grid__item {
+  // Span pomocné třídy
+  &--span-2 { grid-column: span 2; }
+  &--span-3 { grid-column: span 3; }
+  &--span-4 { grid-column: span 4; }
+  &--span-5 { grid-column: span 5; }
+  &--span-6 { grid-column: span 6; }
+  
+  // Full width
+  &--full { grid-column: 1 / -1; }
+}
+
+// Responzivita
+@media (max-width: $breakpoint-lg) {
+  .grid {
+    &--col-6 { grid-template-columns: repeat(4, 1fr); }
+    &--col-5 { grid-template-columns: repeat(3, 1fr); }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .grid {
+    &--col-6,
+    &--col-5,
+    &--col-4 { grid-template-columns: repeat(2, 1fr); }
+    &--col-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .grid {
+    &--col-6,
+    &--col-5,
+    &--col-4,
+    &--col-3,
+    &--col-2 { grid-template-columns: 1fr; }
+  }
+}
+
+// Flex grid (pro případy kde je flex lepší)
+.flex-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $grid-gap;
+  
+  &__item {
+    flex: 1 1 calc(50% - #{$grid-gap});
+    
+    &--1-3 { flex: 1 1 calc(33.333% - #{$grid-gap}); }
+    &--1-4 { flex: 1 1 calc(25% - #{$grid-gap}); }
+    &--1-5 { flex: 1 1 calc(20% - #{$grid-gap}); }
+    &--full { flex: 1 1 100%; }
+  }
+}

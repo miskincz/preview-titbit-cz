@@ -1,0 +1,22 @@
+@use 'variables' as *;
+
+// Globální box-sizing pro všechny elementy
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Základní styly pro HTML elementy
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: $color-text; 
+  background-color: $color-bg-neutral;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

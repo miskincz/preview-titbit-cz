@@ -1,0 +1,74 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.article {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: $border-radius;
+  h1 {
+    @extend .title--h1;
+    margin: 0 0 1rem 0;
+  }
+}   
+
+.listArticleSmall {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  
+  .article-item {
+    a {
+      display: block;
+      text-decoration: none;
+      color: $color-secondary;
+      font-family: $font-trocchi;
+      
+      &:hover h3 {
+        color: $color-secondary;
+      }
+      
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: $border-radius;
+        margin-bottom: 0.5rem;
+      }
+      
+      h3 {
+        font-weight: normal;
+        margin: 0;
+        transition: color 0.3s ease;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .listArticleSmall {
+    grid-template-columns: repeat(2, 1fr);
+    
+    &--col4,
+    &--col3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .listArticleSmall {
+    grid-template-columns: 1fr;
+    
+    &--col4,
+    &--col3,
+    &--col2 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.articlePage {
+  margin: 2rem 0;
+  text-align: center;
+}
+

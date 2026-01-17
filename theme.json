@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        { "name": "Primary", "slug": "primary", "color": "#0055aa" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "fontFamily": "Open Sans, sans-serif",
+          "slug": "open-sans",
+          "name": "Open Sans"
+        }
+      ]
+    },
+    "templateParts": [
+      {
+        "name": "footer",
+        "title": "Patička",
+        "area": "footer"
+      }
+    ]
+  }
+}

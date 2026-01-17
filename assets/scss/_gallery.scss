@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+// Lightbox overlay (pokud použijete vlastní řešení)
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  
+  &.is-active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  img {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+  
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .produktDetail__gallery {
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+  }
+}

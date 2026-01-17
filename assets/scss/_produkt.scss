@@ -1,0 +1,84 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+/*produktDetail*/
+.produktDetail {
+  &__main {
+    display: flex;
+    gap: 3rem;
+    margin: 2rem 0;
+
+  }
+  &__image {
+    width: 50%;
+    position: relative;
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: $border-radius;
+    }
+    .bio-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+  }
+  &__info {
+    width: 50%;
+    background-color: white;
+    border-radius: $border-radius;
+    padding: 2rem;
+  }
+  &__sections {
+    background-color: white;
+    border-radius: $border-radius;
+    padding: 2rem;
+    &__nav {
+        display: flex;
+        gap: 2.5rem;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        .produktTabs__btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 0;
+            font: inherit;
+            cursor: pointer;
+            color: $color-text;
+            position: relative;
+        
+        &.is-active { color: $color-secondary; font-weight: 700; }
+            &.is-active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: $color-secondary;
+            border-radius: 4px;
+            bottom: -10px;
+            width: 60%;
+            margin: 0 auto;
+        }
+        &:focus { outline: 2px dashed rgba(0,0,0,0.1); outline-offset: 4px; }
+        }
+    }
+
+    &__panels {
+        max-width: 100%;
+        display: block;
+        .produktTabs__panel {
+        background: #fff;
+        padding: 2rem;
+        border-radius: $border-radius;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+        color: $color-text;
+        line-height: 1.6;
+        display: none;
+        &.is-active { display: block; }
+        // uvnitř panelu lze použít typografii
+        h3 { margin-top: 0; color: $color-primary; }
+        }
+    }
+  }
+}

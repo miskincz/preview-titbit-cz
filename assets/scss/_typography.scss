@@ -1,0 +1,187 @@
+@use 'variables' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+// Font Size
+$font-size-extra-small: 12px;
+$font-size-small: 14px;
+$font-size-base: 20px;
+$font-size-medium: 18px;
+$font-size-large: 24px;
+
+.font-small {
+  font-size: $font-size-small;
+}
+
+.font-base {
+  font-size: $font-size-base;
+}
+
+.font-medium {
+  font-size: $font-size-medium;
+}
+
+.font-large {
+  font-size: $font-size-large;
+}
+
+.font-size {
+    font-size: var(--font-size);
+}
+// Font Family
+$font-trocchi: 'Trocchi', serif;
+
+
+.title--h1 {
+    font-family: Trocchi;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 36px;
+    line-height: 1.2em;
+    letter-spacing: 0%;
+    color: $color-primary;
+}
+.title--h2 {
+    font-family: Trocchi;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 26px;
+    line-height: 1.2em;
+    letter-spacing: 0%;
+    color: $color-primary;
+}
+.title--h3 {
+    font-family: Trocchi;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 20px;
+    line-height: 1.2em;
+    letter-spacing: 0%;
+    color: $color-primary;
+}
+.title--upper {
+    font-family: Open Sans;
+    font-weight: 800;
+    font-style: ExtraBold;
+    font-size: $font-size-small;
+    line-height: 1.2em;   
+    text-transform: uppercase; 
+}
+
+.title--headingUpp {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.text--center {
+    text-align: center;
+}
+
+// Seznamy - klasické styly
+ul, ol {
+  margin: 0 0 1rem 0;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+ul {
+  list-style-type: disc;
+  
+  li {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  ul {
+    list-style-type: circle;
+    margin-top: 0.5rem;
+    
+    ul {
+      list-style-type: square;
+    }
+  }
+}
+
+ol {
+  list-style-type: decimal;
+  
+  li {
+    margin-bottom: 0.5rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  ol {
+    list-style-type: lower-alpha;
+    margin-top: 0.5rem;
+    
+    ol {
+      list-style-type: lower-roman;
+    }
+  }
+}
+
+// Varianty seznamů
+.list--unstyled {
+  list-style: none;
+  padding-left: 0;
+  
+  li {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.list--inline {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  
+  li {
+    margin-bottom: 0;
+  }
+}
+
+.list--spaced {
+  li {
+    margin-bottom: 1rem;
+  }
+}
+
+.list--checkmark {
+  list-style: none;
+  padding-left: 0;
+  
+  li {
+    padding-left: 1.5rem;
+    position: relative;
+    
+    &::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: $color-secondary;
+      font-weight: bold;
+    }
+  }
+}
+
+a {
+  color: $color-secondary;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: $color-secondary;
+    text-decoration: none;
+  }
+  
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+

@@ -1,0 +1,160 @@
+@use 'variables' as *;
+@use 'typography' as *;
+@use 'sass:color';
+// Komponenty (např. tlačítka, karty atd.)
+.pagination {
+    margin: 3rem 0 4rem 0;
+}
+
+/*probox*/
+body div.asl_w {
+    border-radius: 22px !important;
+    box-shadow: 0;
+}
+body #ajaxsearchlite1 .probox, 
+body div.asl_w .probox {
+    height: 44px;
+    max-width: 520px;
+    min-width: 400px;
+    box-shadow: 0;
+    
+}
+body #ajaxsearchlite1 .probox .proinput input, 
+body div.asl_w .probox .proinput input {
+    height: 44px;
+    font-size: 16px;
+    border-radius: 0;
+    color: $color-text;
+}
+body div.asl_w .probox .promagnifier {
+    width: 36px; height: 36px;
+    background-color: $color-primary;
+    border-radius: 50%;
+    margin: 4px 4px 0 0;
+    box-shadow: none;
+}
+body div.asl_w .probox .promagnifier .innericon svg {
+    fill: $color-bg-neutral;
+}
+div.asl_w .probox .proloading, 
+div.asl_w .probox .proclose, 
+div.asl_w .probox .prosettings {
+    position: relative;
+    top: 8px;
+}
+
+
+/* btns */
+body .btn {
+    border: none;
+    cursor: pointer;
+    &--eshop {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 9px 2rem;
+        background-color: #F60101;
+        font-size: $font-size-small;
+        color: $color-bg-neutral;
+        border-radius: 25px;
+        font-weight: bold;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 31px;
+            margin-right: 15px;
+            background-image: url('data:image/svg+xml,<svg width="20" height="31" viewBox="0 0 20 31" fill="none" xmlns="http://www.w3.org/2000/svg"><path opacity="0.8" d="M18.9856 8.38118H15.6473V7.12137C15.6473 3.61442 13.1132 0.763184 9.99631 0.763184C6.87939 0.763184 4.34526 3.61442 4.34526 7.12137V8.38118H1.007C0.449993 8.38118 0 8.83063 0 9.38683V26.7153C0 28.6566 1.58241 30.2369 3.52639 30.2369H16.4736C18.4176 30.2369 20 28.6566 20 26.7153V9.38683C20 8.83063 19.5499 8.38118 18.9929 8.38118H18.9856ZM6.35188 7.12137C6.35188 4.72324 7.98597 2.77455 9.9926 2.77455C11.9992 2.77455 13.6333 4.72695 13.6333 7.12137V8.38118H6.35188V7.12137ZM17.9786 26.7153C17.9786 27.5478 17.2999 28.2256 16.4662 28.2256H3.51895C2.68527 28.2256 2.00656 27.5478 2.00656 26.7153V10.3925H4.34154V12.7133C4.34154 13.2695 4.79153 13.7189 5.34854 13.7189C5.90555 13.7189 6.35554 13.2695 6.35554 12.7133V10.3925H13.637V12.7133C13.637 13.2695 14.087 13.7189 14.644 13.7189C15.2009 13.7189 15.651 13.2695 15.651 12.7133V10.3925H17.986V26.7153H17.9786Z" fill="%23EFEAE3"/></svg>');
+        }
+        &:hover {
+           text-decoration: none;
+           color: white;
+            &::before {
+               background-image: url('data:image/svg+xml,<svg width="20" height="31" viewBox="0 0 20 31" fill="none" xmlns="http://www.w3.org/2000/svg"><path opacity="0.8" d="M18.9856 8.38118H15.6473V7.12137C15.6473 3.61442 13.1132 0.763184 9.99631 0.763184C6.87939 0.763184 4.34526 3.61442 4.34526 7.12137V8.38118H1.007C0.449993 8.38118 0 8.83063 0 9.38683V26.7153C0 28.6566 1.58241 30.2369 3.52639 30.2369H16.4736C18.4176 30.2369 20 28.6566 20 26.7153V9.38683C20 8.83063 19.5499 8.38118 18.9929 8.38118H18.9856ZM6.35188 7.12137C6.35188 4.72324 7.98597 2.77455 9.9926 2.77455C11.9992 2.77455 13.6333 4.72695 13.6333 7.12137V8.38118H6.35188V7.12137ZM17.9786 26.7153C17.9786 27.5478 17.2999 28.2256 16.4662 28.2256H3.51895C2.68527 28.2256 2.00656 27.5478 2.00656 26.7153V10.3925H4.34154V12.7133C4.34154 13.2695 4.79153 13.7189 5.34854 13.7189C5.90555 13.7189 6.35554 13.2695 6.35554 12.7133V10.3925H13.637V12.7133C13.637 13.2695 14.087 13.7189 14.644 13.7189C15.2009 13.7189 15.651 13.2695 15.651 12.7133V10.3925H17.986V26.7153H17.9786Z" fill="%23ffffff"/></svg>'); 
+            }
+             &::after {
+                content: '';
+                display: inline-block;
+                width: 15px; height: 9px;
+                margin-left: 8px;
+                background-image: url('data:image/svg+xml,<svg width="18" height="11" viewBox="0 0 18 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.5001 5.49999L12.3334 1.33332M16.5001 5.49999L12.3334 9.66666M16.5001 5.49999L1.5001 5.49999" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+                background-size: cover;
+            }
+        }
+    }
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  margin: 1rem 0;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    font-size: $font-size-extra-small;
+  }
+  
+  &__home {
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      svg {
+        width: 16px;
+        height: 18px;
+        position: relative;
+        top: -2px;
+        path {
+          transition: stroke 0.3s ease;
+        }
+      }
+      
+      &:hover svg path {
+        stroke: color.scale($color-secondary, $lightness: -10%);
+      }
+    }
+  }
+  
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    &:not(:last-child)::after {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 11px;
+      margin-left: 0.5rem;
+      background-image: url('data:image/svg+xml,<svg width="7" height="11" viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9.10002L5.5 5.05002L1 1.00002" stroke="%231E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    
+    a {
+      color: $color-text;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    &[aria-current="page"] {
+      color: $color-text;
+      font-weight: 600;
+    }
+  }
+}
+
