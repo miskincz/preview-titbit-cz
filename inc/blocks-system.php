@@ -7,13 +7,13 @@
  * 
  * Funkce:
  * - display_block() - hlavní funkce pro zobrazení bloku
- * - display_spoluprace() - zkrácená verze pro bloky typu "blok"
+ * - display_block() - zkrácená verze pro bloky typu "blok"
  * - Shortcodes [spoluprace] a [block] pro vložení do obsahu
  * - Možnost použití vlastních šablon
  */
 
 // Hlavní funkce pro zobrazení bloku
-function display_block($post_type, $identifier, $template = null) {
+function display_block_full($post_type, $identifier, $template = null) {
   // Najít blok podle ID nebo slug
   if (is_numeric($identifier)) {
     $block = get_post($identifier);
@@ -54,8 +54,8 @@ function display_block($post_type, $identifier, $template = null) {
 }
 
 // Zkrácená funkce pro spolupráci a podobné bloky
-function display_spoluprace($identifier, $template = null) {
-  display_block('blok', $identifier, $template);
+function display_block($identifier, $template = null) {
+  display_block_full('blok', $identifier, $template);
 }
 
 // Shortcode pro vložení spolupráce do obsahu
@@ -71,7 +71,7 @@ add_shortcode('spoluprace', function($atts) {
   if (!$identifier) return '';
   
   ob_start();
-  display_spoluprace($identifier, $atts['template']);
+  display_block($identifier, $atts['template']);
   return ob_get_clean();
 });
 

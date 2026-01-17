@@ -1,13 +1,72 @@
 @use 'variables' as *;
 @use 'typography' as *;
 
-.block__spoluprace {
+// Obecné pravidlo pro všechny bloky
+[class^="block__"] {
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+    a.btn {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.block__jsmecertifikovanouspolecnosti {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    color: $color-text;
+    text-align: center;
+    padding: 1rem 2rem;
+    border: 5px solid $color-bg-neutral;
+    h4 {
+        @extend .title--headingUpp;
+        margin: 0 0 .5rem 0;
+    }
+    h5 {
+        @extend .title--h2;
+        margin: 0;
+    }
+}
+
+.block__karieravtitbitu {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: $color-primary;
     color: $color-text-white;
     text-align: center;
     padding: 1rem 2rem;
-    height: 208px;
-    margin-bottom: 2rem;
+    h4 {
+        color: #C6D218;
+        @extend .title--headingUpp;
+        margin: 0 0 .5rem 0;
+    }
+    h5 {
+        @extend .title--h2;
+        color: #EFEAE2;
+        margin: 0;
+    }
+}
+
+
+.block__spoluprace {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: $color-primary;
+    color: $color-text-white;
+    text-align: center;
+    padding: 1rem 2rem;
     h4 {
         color: #C6D218;
         @extend .title--headingUpp;
@@ -21,16 +80,18 @@
 }
 
 .block__zasobujemerestaurace {
+    height: 100%;
     background-color: #E1CEC0;
     color: $color-text;
-    height: 208px;
     display: flex;
+    align-items: center;
     &__img {
-        height: 208px;
+        height: 100%;
         img {
             display: block;
             width: 100%;
             max-width: 382px;
+            object-fit: cover;
         }
     }
     &__text {

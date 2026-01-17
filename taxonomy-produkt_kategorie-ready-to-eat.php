@@ -63,11 +63,7 @@ get_header();
   </div><!-- .mainOcCattegories__top -->
 
   <div class="mainOcCattegories__main">
-    <nav class="mainOcCattegories__main__nav">
-      <?php render_prod_kat_tree(); ?>
-    </nav>
-    
-    <div class="mainOcCattegories__main__list">
+    <div class="mainOcCattegories__main__list mainOcCattegories__main__list--full">
         <?php
         // Výpis produktů pouze z aktuálního termínu (a jeho podkategorií)
         $paged = get_query_var('paged',1);
@@ -90,7 +86,7 @@ get_header();
           while ($query->have_posts()) { $query->the_post();
             printf('<li><a href="%s">%s%s</a></li>',
               get_permalink(),
-              has_post_thumbnail() ? get_the_post_thumbnail(get_the_ID(),'medium',['class'=>'term-thumb']) : '',
+              has_post_thumbnail() ? get_the_post_thumbnail(get_the_ID(),'product-grid',['class'=>'term-thumb']) : '',
               esc_html(get_the_title())
             );
           }

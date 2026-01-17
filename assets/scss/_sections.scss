@@ -120,7 +120,6 @@
       height: auto;
       background-color: white;
       border-radius: $border-radius;
-      
       > ul {
         padding: 2rem;
         margin: 0;
@@ -166,6 +165,16 @@
     
     &__list {
       width: 75%;
+      &--full {
+        width: 100%;
+        ul {
+          grid-template-columns: repeat(2, 1fr) !important;
+          li a {
+            aspect-ratio: auto !important;
+            padding: 3rem 1rem !important;
+          }
+        }
+      }
       ul {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -191,7 +200,7 @@
             line-height: 1.2em;
             text-align: center;
             color: $color-secondary;
-            
+            padding: 1rem;
             img {
               display: block;
               margin: 0 0 1rem;
@@ -208,6 +217,17 @@
         }
       }
     }
+  }
+}
+
+@keyframes logoFadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -254,18 +274,31 @@
         padding: 2rem;
         box-sizing: border-box;
       }
+      .index__categories__logo2 {
+        position: absolute;
+        top: 0;
+      }
       .index__categories__logo {
         width: 90px; height: 90px;
+        opacity: 0;
+        transform: scale(0.7);
+        transition: opacity 0.4s ease, transform 0.4s ease;
       }
-      
-      span {
+      span.btn {
         position: absolute;
         bottom: 3rem;
         left: 50%;
         transform: translateX(-50%);
       }
-      &:hover span {
-       @include hoverArrowEffect;
+      &:hover {
+        .index__categories__logo {
+          opacity: 1;
+          transform: scale(1);
+        }
+        span.btn {
+          background-color: $color-bg-neutral;
+          @include hoverArrowEffect;
+        }
       }
     }
   }
@@ -273,25 +306,69 @@
 
 /* indexBanners */
 .indexBanners {
-  display: flex;
-  gap: 1rem;
-  &__product {    
-    border-radius: $border-radius;
+  margin: 2rem 0;
+  &__title {
+    width: 35%;
+    float: right;
+    text-align: center;
+    margin: 0 auto 1rem auto;
+  }
+  &__main {
     display: flex;
+    gap: 1rem;
+    clear: both;
+  }
+  &__product {    
+    width: calc(100% - 35% - 1rem);
+    border-radius: $border-radius;
+    a {
+      position: relative;
+      height: 100%; width: 100%;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      &:hover span {
+        @include hoverArrowEffect;
+      }
+    }
+    img {
+      width: 50%; 
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
     &--text {
+      width: 100%;
+      background-image: url(../assets/img/ico_indexbanners-product.svg);
+      background-size: 48px 71px;
+      background-position: top center;
+      background-repeat: no-repeat;
+      padding-top: 90px;
       color: #fff;
-      margin-left: 2rem;
-      text-align: left;
+      margin: 0 2rem;
+      text-align: center;
+      .title--h1 {
+        color: #fff;
+        margin: 0 0 0.5rem 0;
+      }
+       .title--upper {
+        color: #fff;
+        margin: 0 0 0.5rem 0;
+      }
+      p {
+        margin: 2rem 0 0 0;
+      }
     }
   }
-  &__small {
+  &__small {    
+    aspect-ratio: 1;
     border-radius: $border-radius;
     position: relative;
+    width: 35%;
     a {
       position: relative;
       display: block;
       height: 100%; width: 100%;
-      display: block;
       img {
         border-radius: $border-radius;
       }
@@ -346,6 +423,13 @@ blockquote.tiktok-embed > div {
 }
 
 @media (max-width: 768px) {
+  .index__categories li {
+    flex: 0 0 calc(50% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: $breakpoint-xl) {
   .index__categories li {
     flex: 0 0 calc(50% - 0.5rem);
     max-width: calc(50% - 0.5rem);

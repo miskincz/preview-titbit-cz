@@ -91,7 +91,7 @@ get_header(); ?>
           if ($category) {
             $logo = get_field('ockat_logo', 'produkt_kategorie_' . $category->term_id);
             if ($logo) {
-              printf('<img src="%s" alt="" class="category-logo">', esc_url(is_array($logo) ? $logo['url'] : $logo));
+              printf('<img src="%s" alt="" class="index__categories__logo2">', esc_url(is_array($logo) ? $logo['url'] : $logo));
             }
           }
           
@@ -105,18 +105,20 @@ get_header(); ?>
     ?>
 
     <!-- Bloky spolupráce -->
-    <div class="grid grid--col-2">
+    <div class="grid grid--col-2 grid--full-height">
       <div>
-        <?php display_spoluprace(11796, 'spoluprace'); ?>
+        <?php display_block(11796, 'spoluprace'); ?>
       </div>
       <div>
-        <?php display_spoluprace(11797, 'zasobujemerestaurace'); ?>
+        <?php display_block(11797, 'zasobujemerestaurace'); ?>
       </div>
     </div>
 
 
     <div class="indexBanners">
-       <?php
+      <h4 class="indexBanners__title title--upper ">najdete v obchodech a e-shopech</h4>
+      <div class="indexBanners__main">
+      <?php
         $banner_ids = [11863]; // Přidejte další ID, např. [11863, 11864, 11865, 11866]
         foreach ($banner_ids as $banner_id):
           $obrazek = get_field('hp_produktbanner-img', $banner_id);
@@ -124,18 +126,23 @@ get_header(); ?>
           $nadpis = get_field('hp_produktbanner-nadpis', $banner_id);
           $text = get_field('hp_produktbanner-text', $banner_id);
           $odkaz = get_field('hp_produktbanner-odkaz', $banner_id);
-          ?>
+      ?>
         <div class="indexBanners__product" style="background-color: <?php echo esc_attr($barva ?: '#DF0C53'); ?>;">
-          <?php if ($obrazek): ?><img src="<?php echo esc_url(is_array($obrazek) ? $obrazek['url'] : $obrazek); ?>" alt=""><?php endif; ?>
-          <div class="indexBanners__product--text">
-            <?php if ($nadpis): ?>
-              <h3><?php echo esc_html($nadpis); ?></h3>
-            <?php endif; ?>
-            <?php if ($text): ?>
-              <?php echo wp_kses_post($text); ?>
-            <?php endif; ?>
-            <a href="<?php echo esc_url($odkaz); ?>" class="btn btn--block">Jít nakupovat</a>
-          </div>
+          <a href="<?php echo esc_url($odkaz); ?>">
+            <?php if ($obrazek): ?><img src="<?php echo esc_url(is_array($obrazek) ? $obrazek['url'] : $obrazek); ?>" alt=""><?php endif; ?>
+            <div class="indexBanners__product--text">
+              <h4 class="title--upper ">koupíte v našem e-shopu</h4>
+              <?php if ($nadpis): ?>
+                <h3 class="title--h1"><?php echo esc_html($nadpis); ?></h3>
+              <?php endif; ?>
+              <?php if ($text): ?>
+                <?php echo wp_kses_post($text); ?>
+              <?php endif; ?>
+              <?php if ($odkaz): ?>
+                <p><span class="btn btn--block">Jít nakupovat</span></p>
+              <?php endif; ?>
+            </div>
+          </a>
         </div>  
         <?php endforeach; ?>
     
@@ -156,7 +163,18 @@ get_header(); ?>
           
         <?php endforeach; ?>
       </div>
-  </div><!-- .siteContainer -->
+    </div>
+  </div>
 
-</main>
+  <!-- Bloky spolupráce -->
+    <div class="grid grid--col-2 grid--full-height">
+      <div>
+        <?php display_block(11922, 'jsmecertifikovanouspolecnosti'); ?>
+      </div>
+      <div>
+        <?php display_block(11923, 'karieravtitbitu'); ?>
+      </div>
+    </div>
+
+</main><!-- .siteContainer -->
 <?php get_footer(); ?>

@@ -82,22 +82,43 @@
       <!-- Produktová řada: kategorie produktu -->
       <?php
       $cats = get_the_terms( get_the_ID(), 'produkt_kategorie' );
-      $exclude_parents = ['produktove-rady', 'ready-to-eat', 'ovoce-a-zelenina'];
+      $root_categories = ['produktove-rady', 'ready-to-eat', 'ovoce-a-zelenina'];
+      
+      // Získat všechny root kategorie jednou
       $ovoce_term = get_term_by('slug', 'ovoce-a-zelenina', 'produkt_kategorie');
       $ovoce_id = $ovoce_term ? $ovoce_term->term_id : 0;
       
+      $ready_to_eat_term = get_term_by('slug', 'ready-to-eat', 'produkt_kategorie');
+      $ready_to_eat_id = $ready_to_eat_term ? $ready_to_eat_term->term_id : 0;
+      
       if ( $cats && ! is_wp_error( $cats ) ) {
-        $badges = [];
+        // Seřadit kategorie do dvou skupin podle priority
+        $ready_to_eat = [];
+        $product_series = [];
+        
         foreach ( $cats as $cat ) {
-          // přeskočit root kategorie
-          if ( in_array( $cat->slug, $exclude_parents, true ) ) {
+          // Přeskočit root kategorie
+          if ( in_array( $cat->slug, $root_categories, true ) ) {
             continue;
           }
-          // přeskočit přímé potomky "ovoce-a-zelenina"
+          // Přeskočit přímé potomky "ovoce-a-zelenina"
           if ( $ovoce_id && $cat->parent === $ovoce_id ) {
             continue;
           }
           
+          // Zařadit do skupin podle parent ID
+          if ( $ready_to_eat_id && $cat->parent === $ready_to_eat_id ) {
+            $ready_to_eat[] = $cat;
+          } else {
+            $product_series[] = $cat;
+          }
+        }
+        
+        // Seřadit: ready-to-eat, produktove-rady
+        $sorted_cats = array_merge( $ready_to_eat, $product_series );
+        
+        $badges = [];
+        foreach ( $sorted_cats as $cat ) {
           // Ikona pro produktovou řadu
           $icon_slug = sanitize_title($cat->name);
           $icon_path = get_template_directory_uri() . '/assets/img/produktove-rady/' . $icon_slug . '.png';
@@ -248,10 +269,10 @@
   
     <div class="grid grid--col-2">
       <div>
-        <?php display_spoluprace(11796, 'spoluprace'); ?>
+        <?php display_block(11796, 'spoluprace'); ?>
       </div>
       <div>
-        <?php display_spoluprace(11797, 'zasobujemerestaurace'); ?>
+        <?php display_block(11797, 'zasobujemerestaurace'); ?>
       </div>
     </div>
   

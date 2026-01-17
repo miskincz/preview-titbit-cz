@@ -85,6 +85,8 @@
   &--center { align-items: center; justify-items: center; }
   &--start { align-items: start; justify-items: start; }
   &--end { align-items: end; justify-items: end; }
+  &--stretch { align-items: stretch; }
+  &--full-height { align-items: stretch; }
 }
 
 // Grid items

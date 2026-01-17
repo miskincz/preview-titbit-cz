@@ -31,6 +31,7 @@ add_action('after_setup_theme', function () {
   // Vlastní velikosti obrázků pro produkty
   add_image_size('product-main', 800, 800, false);  // Hlavní obrázek produktu (bez ořezu)
   add_image_size('product-thumb', 200, 133, true);  // Miniatura pro galerii (s ořezem)
+  add_image_size('product-grid', 600, 400, true);   // Produkty v gridu (s ořezem)
   
   // Registrace navigačních menu
   register_nav_menus([

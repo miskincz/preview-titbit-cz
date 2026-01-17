@@ -20,3 +20,9 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+.siteContainer {
+  max-width: calc(1600px + 2rem);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
