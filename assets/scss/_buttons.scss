@@ -39,11 +39,10 @@
 // Varianty barev
 .btn--primary {
   background-color: $color-secondary;
-  color: $color-text-white;
+  color: $color-text-neutral;
   &:hover {
     color: #fff;
-    background-color: color.scale($color-secondary, $lightness: -10%);
-    @include hoverArrowEffect;
+    /*@include hoverArrowEffect;*/
   }
 }
 
@@ -58,13 +57,13 @@
 .btn--block {
   display: inline-block;
   background-color: $color-bg-neutral;
-  padding: 0.5rem 1rem;
-  border-radius: $border-radius;
   color: $color-text;
   white-space: nowrap;
+  transition: all 0.3s ease;
   &:hover {
-    background-color: $color-bg-neutral;
-    @include hoverArrowEffect;
+    background-color: #fff !important;
+    color: #000 !important;
+    /*@include hoverArrowEffect;*/
   }
 }
 

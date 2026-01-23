@@ -277,11 +277,13 @@
       .index__categories__logo2 {
         position: absolute;
         top: 0;
+        max-height: 80px;
+        height: auto;
       }
       .index__categories__logo {
         width: 90px; height: 90px;
         opacity: 0;
-        transform: scale(0.7);
+        /*transform: scale(0.7);*/
         transition: opacity 0.4s ease, transform 0.4s ease;
       }
       span.btn {
@@ -293,11 +295,12 @@
       &:hover {
         .index__categories__logo {
           opacity: 1;
-          transform: scale(1);
+          /*transform: scale(1);*/
         }
         span.btn {
-          background-color: $color-bg-neutral;
-          @include hoverArrowEffect;
+          background-color: #fff !important;
+          color: #000 !important;
+            @include hoverArrowEffect;
         }
       }
     }

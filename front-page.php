@@ -167,14 +167,76 @@ get_header(); ?>
   </div>
 
   <!-- Bloky spolupráce -->
-    <div class="grid grid--col-2 grid--full-height">
-      <div>
-        <?php display_block(11922, 'jsmecertifikovanouspolecnosti'); ?>
-      </div>
-      <div>
-        <?php display_block(11923, 'karieravtitbitu'); ?>
-      </div>
+  <div class="grid grid--col-2 grid--full-height">
+    <div>
+      <?php display_block(11922, 'jsmecertifikovanouspolecnosti'); ?>
     </div>
+    <div>
+      <?php display_block(11923, 'karieravtitbitu'); ?>
+    </div>
+  </div>
+
+  <div class="grid grid--col-2 grid--full-height">
+    <div>
+      <?php
+        // Náhodný blog příspěvek
+        $blog_query = new WP_Query([
+          'post_type' => 'post',
+          'category_name' => 'clanky',
+          'posts_per_page' => 1,
+          'orderby' => 'rand'
+        ]);
+        
+        if ($blog_query->have_posts()):
+          while ($blog_query->have_posts()): $blog_query->the_post(); ?>
+            <article class="blogCard">
+              <h4>články z titbit blogu</h4>
+              <p>Jak se co jí a k čemu je to dobré?</p>
+              <?php if (has_post_thumbnail()): ?>
+                <a href="<?php the_permalink(); ?>">
+                  <img src="<?php echo esc_url(get_the_post_thumbnail_url('product-main') ?: get_the_post_thumbnail_url('large') ?: get_the_post_thumbnail_url('medium') ?: get_the_post_thumbnail_url('thumbnail')); ?>" alt="<?php the_title(); ?>" width="750">
+                </a>
+              <?php endif; ?>
+              <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+              <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
+              <a href="<?php the_permalink(); ?>" class="btn btn--primary">Přečíst článek</a>
+            </article>
+          <?php endwhile;
+          wp_reset_postdata();
+        endif;
+      ?>
+    </div>
+    <div>
+      <h4>inspirujte se od známých kuchařů</h4>
+      <p>Z našich surovin uvařeno pro vás</p>
+      <?php
+        // Náhodný recept
+        $recipe_query = new WP_Query([
+          'post_type' => 'post',
+          'category_name' => 'recepty',
+          'posts_per_page' => 1,
+          'orderby' => 'rand',
+          'cat' => 0 // Všechny kategorie (případně specifikuj ID kategorie pro recepty)
+        ]);
+        
+        if ($recipe_query->have_posts()):
+          while ($recipe_query->have_posts()): $recipe_query->the_post(); ?>
+            <article>
+              <?php if (has_post_thumbnail()): ?>
+                <a href="<?php the_permalink(); ?>">
+                  <img src="<?php echo esc_url(get_the_post_thumbnail_url('product-main') ?: get_the_post_thumbnail_url('large') ?: get_the_post_thumbnail_url('medium') ?: get_the_post_thumbnail_url('thumbnail')); ?>" alt="<?php the_title(); ?>" width="750">
+                </a>
+              <?php endif; ?>
+              <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+              <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
+              <a href="<?php the_permalink(); ?>" class="btn btn--block">Vyzkoušet recept</a>
+            </article>
+          <?php endwhile;
+          wp_reset_postdata();
+        endif;
+      ?>
+    </div>
+  </div>
 
 </main><!-- .siteContainer -->
 <?php get_footer(); ?>

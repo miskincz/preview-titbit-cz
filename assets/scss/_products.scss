@@ -20,11 +20,13 @@
       height: auto;
       border-radius: $border-radius;
     }
-    .bio-badge {
+    &__bio {
       position: absolute;
       top: 1rem;
       right: 1rem;
+      width: 64px !important; height: 64px !important;
     }
+    
   }
   &__latin {
     font-style: italic;
@@ -85,6 +87,7 @@
     background-color: white;
     border-radius: $border-radius;
     padding: 2rem;
+    margin: 2rem 0;
     .produktDetail__nav__panels {
       max-width: 1000px;
       margin: 0 auto;

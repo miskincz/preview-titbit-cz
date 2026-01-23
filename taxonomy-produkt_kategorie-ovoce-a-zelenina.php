@@ -53,6 +53,10 @@ get_header();
       }
     ?>>
       <?php
+        $logo = get_field('ockat_logo', 'produkt_kategorie_' . $term->term_id);
+        if ($logo) {
+          printf('<img src="%s" alt="" class="mainOcCattegories__top__text__logo">', esc_url(is_array($logo) ? $logo['url'] : $logo));
+        }
         // Pokud je termín druhé či další úrovně, vypiš nadřazenou kategorii jako H2
         if ( $term->parent ) {
           $ancestors = get_ancestors( $term->term_id, 'produkt_kategorie' );
@@ -69,9 +73,9 @@ get_header();
   </div><!-- .mainOcCattegories__top -->
 
   <div class="mainOcCattegories__main">
-    <!-- Boční navigace - strom kategorií -->
+    <!-- Horizontální navigace - podkategorie -->
     <nav class="mainOcCattegories__main__nav">
-      <?php render_prod_kat_tree(); ?>
+      <?php render_prod_kat_horizontal_menu(); ?>
     </nav>
     
     <!-- Seznam produktů v kategorii -->
@@ -80,8 +84,12 @@ get_header();
         // Výpis produktů pouze z aktuálního termínu (a jeho podkategorií)
         $paged = get_query_var('paged',1);
         
+        $paged = get_query_var('paged',1);
+        
         $query = new WP_Query([
           'post_type'      => 'produkt',
+          'orderby'        => 'title',
+          'order'          => 'ASC',
           'tax_query'      => [[
             'taxonomy'         => 'produkt_kategorie',
             'field'            => 'term_id',

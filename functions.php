@@ -21,6 +21,54 @@ add_action('wp_enqueue_scripts', function() {
 });
 
 // ==========================================
+// ADMIN - QUICK PRODUCT EDITOR
+// ==========================================
+
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+  // Debug: Log všech hook hodnot
+  error_log( 'Admin hook: ' . $hook );
+  
+  // Zkontrolovat, zda jsme na správné admin stránce
+  if ( strpos( $hook, 'quick-product-editor' ) === false ) {
+    return;
+  }
+  
+  // Enqueue jQuery (už je v WordPressu, ale explicito)
+  wp_enqueue_script( 'jquery' );
+  
+  // Enqueue WordPress media picker skriptu a stylů
+  wp_enqueue_media();
+  
+  // Enqueue vlastní CSS
+  wp_enqueue_style(
+    'qpe-style',
+    get_template_directory_uri() . '/inc/quick-editor/quick-editor.css',
+    [],
+    '1.0.0'
+  );
+  
+  // Enqueue vlastní JavaScript
+  wp_enqueue_script(
+    'qpe-script',
+    get_template_directory_uri() . '/inc/quick-editor/quick-editor.js',
+    ['jquery', 'wp-util'],
+    '1.0.0',
+    true
+  );
+  
+  // Předání proměnných do JavaScriptu
+  wp_localize_script(
+    'qpe-script',
+    'qpeData',
+    [
+      'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+      'nonce' => wp_create_nonce( 'qpe_nonce' ),
+      'perPage' => 20,
+    ]
+  );
+} );
+
+// ==========================================
 // INICIALIZACE TÉMATU
 // ==========================================
 
@@ -76,6 +124,8 @@ require_once get_template_directory() . '/inc/blocks-system.php';          // Un
 require_once get_template_directory() . '/inc/media-folders.php';          // Organizace médií do kategorií
 require_once get_template_directory() . '/inc/gallery-enhancements.php';   // Vylepšení WP galerie + lightbox
 require_once get_template_directory() . '/inc/product-gallery.php';        // Vlastní galerie pro produkty
+require_once get_template_directory() . '/inc/quick-editor/admin-page.php'; // Quick Product Editor - Admin stránka
+require_once get_template_directory() . '/inc/quick-editor/ajax-handler.php'; // Quick Product Editor - AJAX handlery
 
 // ==========================================
 // URL REWRITE - PRODUKTY
@@ -180,6 +230,8 @@ function load_more_products() {
   
   $query = new WP_Query([
     'post_type'      => 'produkt',
+    'orderby'        => 'title',
+    'order'          => 'ASC',
     'tax_query'      => [[
       'taxonomy'         => 'produkt_kategorie',
       'field'            => 'term_id',
@@ -292,6 +344,97 @@ function render_prod_kat_tree() {
     foreach ($child_terms as $child) {
       $class = ($current_term->term_id == $child->term_id) ? ' class="active"' : '';
       printf('<li%s><a href="%s">%s</a></li>', $class, get_term_link($child), esc_html($child->name));
+    }
+    echo '</ul>';
+  }
+  
+  echo '</li></ul>';
+}
+
+/**
+ * Vykreslí vodorovné menu s podkategoriemi
+ * Řadí se podle pozice v menu "Hlavní navigace"
+ * Root kategorie (nadpoložka) + její podpoložky v menu
+ * Aktivní položky mají class="active"
+ */
+function render_prod_kat_horizontal_menu() {
+  $current_term = get_queried_object();
+  
+  // Najít root kategorii (nejhornější předek)
+  $ancestors = get_ancestors($current_term->term_id, 'produkt_kategorie');
+  if ($ancestors) {
+    $root_term_id = end($ancestors);
+    $root_term = get_term($root_term_id, 'produkt_kategorie');
+  } else {
+    $root_term = $current_term; // Aktuální termín je root
+  }
+  
+  if (!$root_term || is_wp_error($root_term)) return;
+  
+  // Získat položky z menu "Hlavní navigace"
+  $menu_name = 'main-menu';
+  $locations = get_nav_menu_locations();
+  $menu_id = isset($locations[$menu_name]) ? $locations[$menu_name] : false;
+  
+  $menu_items = [];
+  $root_menu_item = null;
+  
+  if ($menu_id) {
+    $items = wp_get_nav_menu_items($menu_id);
+    
+    // Najít menu item pro root kategorii a jeho podpoložky
+    foreach ($items as $item) {
+      // Kontrola, zda jde o taxonomy item pro produkt_kategorie
+      if ($item->object === 'produkt_kategorie' && $item->object_id == $root_term->term_id) {
+        $root_menu_item = $item;
+        break;
+      }
+    }
+    
+    // Pokud jsme našli root item, najděme jeho podpoložky
+    if ($root_menu_item) {
+      foreach ($items as $item) {
+        if ($item->menu_item_parent == $root_menu_item->ID && $item->object === 'produkt_kategorie') {
+          $menu_items[] = $item;
+        }
+      }
+    }
+  }
+  
+  // Pokud menu items nejsou v menu, použij fallback na taxonomii
+  if (empty($menu_items)) {
+    $child_terms = get_terms([
+      'taxonomy' => 'produkt_kategorie',
+      'parent' => $root_term->term_id,
+      'hide_empty' => false,
+      'orderby' => 'name'
+    ]);
+    
+    // Převést termy na formát kompatibilní s menu items
+    foreach ($child_terms as $child) {
+      $item = new stdClass();
+      $item->object_id = $child->term_id;
+      $item->title = $child->name;
+      $item->url = get_term_link($child);
+      $menu_items[] = $item;
+    }
+  }
+  
+  // Výpis vodorovného menu
+  echo '<ul class="cat-menu">';
+  
+  // Root kategorie jako nadpoložka
+  $class = ($current_term->term_id == $root_term->term_id) ? ' class="active"' : '';
+  printf('<li%s><a href="%s">%s</a>', $class, get_term_link($root_term), esc_html($root_term->name));
+  
+  // Podpoložky z menu
+  if (!empty($menu_items)) {
+    echo '<ul>';
+    foreach ($menu_items as $item) {
+      $item_url = isset($item->url) ? $item->url : get_term_link($item->object_id, 'produkt_kategorie');
+      $item_title = isset($item->title) ? $item->title : get_term($item->object_id, 'produkt_kategorie')->name;
+      $class = ($current_term->term_id == $item->object_id) ? ' class="active"' : '';
+      printf('<li%s><a href="%s">%s</a></li>', $class, esc_url($item_url), esc_html($item_title));
     }
     echo '</ul>';
   }
@@ -415,3 +558,87 @@ function render_breadcrumbs() {
 add_action('admin_init', function() {
   add_post_type_support('produkt', 'thumbnail');
 });
+
+// ==========================================
+// PODPORA SVG SOUBORŮ
+// ==========================================
+
+/**
+ * Povolení SVG souborů v administraci
+ * Přidá SVG MIME typ do seznamu povolených souborů
+ */
+add_filter('upload_mimes', function($mimes) {
+  $mimes['svg'] = 'image/svg+xml';
+  return $mimes;
+});
+
+/**
+ * Sanitizace SVG souborů z bezpečnostních důvodů
+ * Zajistí, aby SVG soubory neobsahovaly škodlivý kód
+ */
+add_filter('wp_handle_upload_prefilter', function($file) {
+  if ($file['type'] === 'image/svg+xml') {
+    // Kontrola, zda jde o SVG soubor
+    if (pathinfo($file['name'], PATHINFO_EXTENSION) === 'svg') {
+      // Přečíst obsah souboru a ověřit strukturu
+      $content = @file_get_contents($file['tmp_name']);
+      if ($content === false) {
+        $file['error'] = __('Nepodařilo se přečíst SVG soubor.', 'mytheme');
+        return $file;
+      }
+      
+      // Parsovat XML a kontrola bezpečnosti
+      $xml = @simplexml_load_string($content);
+      if ($xml === false) {
+        $file['error'] = __('Nejedná se o validní SVG soubor.', 'mytheme');
+        return $file;
+      }
+      
+      // Kontrola na zakázané elementy (script, iframe, apod.)
+      $dom = new DOMDocument();
+      $dom->loadXML($content);
+      
+      $dangerous_elements = ['script', 'iframe', 'object', 'embed', 'link'];
+      foreach ($dangerous_elements as $element) {
+        $elements = $dom->getElementsByTagName($element);
+        if ($elements->length > 0) {
+          $file['error'] = __('SVG soubor obsahuje zakázané elementy.', 'mytheme');
+          return $file;
+        }
+      }
+      
+      // Kontrola na event handlery (onclick, onload, apod.)
+      $xpath = new DOMXPath($dom);
+      $nodes = $xpath->query('//*[@*[starts-with(name(), "on")]]');
+      if ($nodes->length > 0) {
+        $file['error'] = __('SVG soubor obsahuje zakázané event handlery.', 'mytheme');
+        return $file;
+      }
+    }
+  }
+  
+  return $file;
+});
+
+/**
+ * Povolení SVG obrázků v media library
+ */
+add_filter('wp_get_attachment_image_src', function($image, $attachment_id, $size, $icon) {
+  $mime = get_post_mime_type($attachment_id);
+  if ($mime === 'image/svg+xml') {
+    return [wp_get_attachment_url($attachment_id), '', ''];
+  }
+  return $image;
+}, 10, 4);
+
+/**
+ * Zobrazení SVG náhledů v media library
+ */
+add_filter('wp_check_filetype_and_ext', function($data, $file, $filename, $mimes) {
+  $filetype = wp_check_filetype($filename, $mimes);
+  if ($filetype['ext'] === 'svg' || pathinfo($filename, PATHINFO_EXTENSION) === 'svg') {
+    $data['ext'] = 'svg';
+    $data['type'] = 'image/svg+xml';
+  }
+  return $data;
+}, 10, 4);

@@ -38,7 +38,7 @@ get_header();
     </div><!-- .mainOcCattegories__top__image -->
     <div class="mainOcCattegories__top__text"<?php
       $bg_color = get_field('ockat_barva_pozadi', 'produkt_kategorie_' . $term->term_id);
-      $text_color = get_field('ockat_barva_text', 'produkt_kategorie_' . $term->term_id);
+      $text_color = get_field('ockat_barva_textu', 'produkt_kategorie_' . $term->term_id);
       if ($bg_color || $text_color) {
         echo ' style="';
         if ($bg_color) echo 'background-color: ' . esc_attr($bg_color) . ';';
@@ -46,8 +46,10 @@ get_header();
         echo '"';
       }
     ?>>
-      <?php
-        // pokud je termín druhé či další úrovně, vypiš nadřazenou kategorii jako H2
+      <?php        $logo = get_field('ockat_logo', 'produkt_kategorie_' . $term->term_id);
+        if ($logo) {
+          printf('<img src="%s" alt="" class="index__categories__logo">', esc_url(is_array($logo) ? $logo['url'] : $logo));
+        }        // pokud je termín druhé či další úrovně, vypiš nadřazenou kategorii jako H2
         if ( $term->parent ) {
           $ancestors = get_ancestors( $term->term_id, 'produkt_kategorie' );
           $top_id    = end( $ancestors );
@@ -74,6 +76,8 @@ get_header();
         
         $query = new WP_Query([
           'post_type'      => 'produkt',
+          'orderby'        => 'title',
+          'order'          => 'ASC',
           'tax_query'      => [[
             'taxonomy'         => 'produkt_kategorie',
             'field'            => 'term_id',

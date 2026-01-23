@@ -20,7 +20,15 @@
     <!-- Hlavní obrázek produktu -->
     <div class="produktDetail__image">
       <?php if ( has_post_thumbnail() ) : ?>
-        <?php the_post_thumbnail('large'); ?>
+        <?php 
+          $thumbnail_id = get_post_thumbnail_id();
+          $full_image = wp_get_attachment_image_url($thumbnail_id, 'full');
+        ?>
+        <a href="<?php echo esc_url($full_image); ?>" 
+           class="gallery-item"
+           data-lightbox="gallery">
+          <?php the_post_thumbnail('large'); ?>
+        </a>
       <?php endif; ?>
 
       <!-- Fotogalerie produktu -->
@@ -101,8 +109,9 @@
           if ( in_array( $cat->slug, $root_categories, true ) ) {
             continue;
           }
-          // Přeskočit přímé potomky "ovoce-a-zelenina"
-          if ( $ovoce_id && $cat->parent === $ovoce_id ) {
+          
+          // Pokud je přímý potomek ovoce-a-zelenina, přeskočit vše kromě cerstve-chilli
+          if ( $ovoce_id && $cat->parent === $ovoce_id && $cat->slug !== 'cerstve-chilli' ) {
             continue;
           }
           
@@ -119,24 +128,22 @@
         
         $badges = [];
         foreach ( $sorted_cats as $cat ) {
-          // Ikona pro produktovou řadu
-          $icon_slug = sanitize_title($cat->name);
-          $icon_path = get_template_directory_uri() . '/assets/img/produktove-rady/' . $icon_slug . '.png';
+          // Logo z ACF pole kategorie
+          $image = get_field('ockat_logo2', 'produkt_kategorie_' . $cat->term_id);
+          if (!$image) {
+            $image = get_field('ockat_logo', 'produkt_kategorie_' . $cat->term_id);
+          }
           
-          // Zkontrolovat zda soubor existuje
-          $icon_file = get_template_directory() . '/assets/img/produktove-rady/' . $icon_slug . '.png';
-          $has_icon = file_exists($icon_file);
-          
-          if ($has_icon) {
-            // Jen ikona, bez textu
+          if ($image) {
+            // S logem
             $badges[] = sprintf(
               '<span class="badge"><a href="%s"><img src="%s" alt="%s" class="badge-icon"></a></span>',
               esc_url( get_term_link( $cat ) ),
-              esc_url($icon_path),
+              esc_url($image),
               esc_attr($cat->name)
             );
           } else {
-            // Jen text, bez ikony
+            // Jen text, bez loga
             $badges[] = sprintf(
               '<span class="badge"><a href="%s">%s</a></span>',
               esc_url( get_term_link( $cat ) ),
@@ -170,16 +177,29 @@
       <?php 
       $dostupnost_text = get_field('produkty_dostupnost');
       if ( $dostupnost_text ) :
+        // Rozdělit text na jednotlivé prvky
+        $casti = array_map('trim', explode(',', $dostupnost_text));
+        $dostupne_mesice = [];
+        $dalsi_text = [];
+        
+        // Rozdělit na čísla (měsíce) a ostatní text
+        foreach ($casti as $cast) {
+          if (is_numeric($cast)) {
+            $dostupne_mesice[] = (int)$cast;
+          } elseif ($cast !== '') {
+            $dalsi_text[] = $cast;
+          }
+        }
+        
+        // Pokud jsou číselné hodnoty, zobrazit tabulku
+        if (!empty($dostupne_mesice)) :
       ?>
         <div class="produktDetail__dostupnost">
           <h4>Dostupnost v měsících</h4>
           <div class="produktDetail__dostupnost__main">
             <ul class="produktDetail__dostupnost__mesice">
               <?php
-              // Rozdělit čísla měsíců (1, 2, 3, 12)
-              $dostupne_mesice = $dostupnost_text ? 
-                array_map('trim', explode(',', $dostupnost_text)) : [];
-              
+              // Vyřadit měsíce
               for ($cislo = 1; $cislo <= 12; $cislo++) {
                 $je_dostupny = in_array($cislo, $dostupne_mesice);
                 $class = $je_dostupny ? 'is-available' : '';
@@ -187,9 +207,26 @@
               }
               ?>
             </ul>
+            <?php if (!empty($dalsi_text)) : ?>
+              <div class="produktDetail__dostupnost__text">
+                <?php echo esc_html(implode(', ', $dalsi_text)); ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
-      <?php endif; ?>
+      <?php 
+        // Pokud jsou jen texty bez čísel, zobrazit jen text
+        elseif (!empty($dalsi_text)) :
+      ?>
+        <div class="produktDetail__dostupnost">
+          <h4>Dostupnost</h4>
+          <div class="produktDetail__dostupnost__text">
+            <?php echo esc_html(implode(', ', $dalsi_text)); ?>
+          </div>
+        </div>
+      <?php 
+        endif;
+      endif; ?>
 
       <!-- Kde koupit -->
       <?php 
@@ -285,6 +322,7 @@
   $vyuziti = get_field('produkty_vyuziti');
   $nutricni = get_field('produkty_nutricni_hodnoty');
   $vyzkousej = get_field('produkty_muzete_vyzkousei');
+  $slozeni = get_field('produkty_slozeni');
 
   if ( $charakteristika ) {
     $tabs[] = [ 'key' => 'desc', 'label' => 'Popis produktu', 'content' => $charakteristika ];
@@ -297,6 +335,7 @@
   if ( $vyuziti )   $tabs[] = [ 'key' => 'usage', 'label' => 'Využití, konzumace', 'content' => $vyuziti ];
   if ( $nutricni )  $tabs[] = [ 'key' => 'nutri',  'label' => 'Nutriční hodnoty, původ, zajímavosti', 'content' => $nutricni ];
   if ( $vyzkousej ) $tabs[] = [ 'key' => 'try',   'label' => 'Můžete vyzkoušet', 'content' => $vyzkousej ];
+  if ( $slozeni )   $tabs[] = [ 'key' => 'composition', 'label' => 'Složení', 'content' => $slozeni ];
 
   if ( ! empty( $tabs ) ) :
   ?>
