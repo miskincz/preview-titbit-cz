@@ -48,8 +48,9 @@
 
 .btn--secondary {
   background-color: $color-secondary;
-  color: #fff;
+  color: $color-text-neutral;
   &:hover {
+    color: #fff;
     background-color: color.scale($color-secondary, $lightness: -10%);
   }
 }

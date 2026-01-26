@@ -36,19 +36,64 @@
       // Načtení galerie z meta pole
       $galerie_ids = get_post_meta(get_the_ID(), '_product_gallery', true);
       $galerie = $galerie_ids ? explode(',', $galerie_ids) : [];
-       if ( $galerie && is_array($galerie) ) : ?>
+      
+      // Načtení videí z meta pole
+      $video_ids = get_post_meta(get_the_ID(), '_product_videos', true);
+      $video_ids = $video_ids ? explode(',', $video_ids) : [];
+      
+      // Načtení custom thumbnailů pro videa
+      $video_thumbs = get_post_meta(get_the_ID(), '_product_video_thumbs', true);
+      $video_thumbs = $video_thumbs && is_array($video_thumbs) ? $video_thumbs : [];
+       
+      if ( ($galerie && is_array($galerie)) || ($video_ids && is_array($video_ids)) ) : ?>
         <div class="produktDetail__gallery">          
           <div class="gallery-grid">
+            <!-- Obrázky z galerie -->
             <?php foreach ( $galerie as $foto_id ) : 
               $foto_id = trim($foto_id);
               if (!$foto_id) continue;
               $full_image = wp_get_attachment_image_url($foto_id, 'full');
             ?>
-              <!-- Odkaz na plnou velikost obrázku pro lightbox -->
               <a href="<?php echo esc_url($full_image); ?>" 
-                 class="gallery-item"
+                 class="gallery-item gallery-image"
                  data-lightbox="gallery">
                 <?php echo wp_get_attachment_image( $foto_id, 'product-thumb' ); ?>
+              </a>
+            <?php endforeach; ?>
+            
+            <!-- Videa -->
+            <?php foreach ( $video_ids as $video_id ) : 
+              $video_id = trim($video_id);
+              if (!$video_id) continue;
+              
+              $video_url = wp_get_attachment_url($video_id);
+              if (!$video_url) continue;
+              
+              // Zkusit vlastní thumbnail, pak featured image, pak nic
+              $thumb_url = '';
+              if (isset($video_thumbs[$video_id])) {
+                $thumb_url = $video_thumbs[$video_id];
+              } else {
+                $thumb_id = get_post_thumbnail_id($video_id);
+                if ($thumb_id) {
+                  $thumb_url = wp_get_attachment_image_url($thumb_id, 'product-thumb');
+                }
+              }
+            ?>
+              <a href="<?php echo esc_url($video_url); ?>" 
+                 class="gallery-item gallery-video gallery-video--mp4"
+                 data-lightbox="gallery"
+                 data-video-type="mp4">
+                <?php if ($thumb_url) : ?>
+                  <img src="<?php echo esc_url($thumb_url); ?>" alt="Video" class="gallery-video__thumb">
+                <?php else : ?>
+                  <div class="gallery-video__placeholder"></div>
+                <?php endif; ?>
+                <button type="button" class="gallery-video__button" aria-label="Play video">
+                  <svg class="gallery-video__icon" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21"></polygon>
+                  </svg>
+                </button>
               </a>
             <?php endforeach; ?>
           </div>
@@ -134,10 +179,17 @@
             $image = get_field('ockat_logo', 'produkt_kategorie_' . $cat->term_id);
           }
           
+          // Tooltip - nejdřív zkusit ACF pole, pak se vrátit na název
+          $tooltip = get_field('ockat_logo_tooltip', 'produkt_kategorie_' . $cat->term_id);
+          if (!$tooltip) {
+            $tooltip = $cat->name;
+          }
+          
           if ($image) {
             // S logem
             $badges[] = sprintf(
-              '<span class="badge"><a href="%s"><img src="%s" alt="%s" class="badge-icon"></a></span>',
+              '<span class="badge tooltip-wrapper" data-tooltip="%s"><a href="%s"><img src="%s" alt="%s" class="badge-icon"></a></span>',
+              esc_attr($tooltip),
               esc_url( get_term_link( $cat ) ),
               esc_url($image),
               esc_attr($cat->name)
@@ -145,7 +197,8 @@
           } else {
             // Jen text, bez loga
             $badges[] = sprintf(
-              '<span class="badge"><a href="%s">%s</a></span>',
+              '<span class="badge tooltip-wrapper" data-tooltip="%s"><a href="%s">%s</a></span>',
+              esc_attr($tooltip),
               esc_url( get_term_link( $cat ) ),
               esc_html( $cat->name )
             );
@@ -227,6 +280,21 @@
       <?php 
         endif;
       endif; ?>
+
+      <!-- Kde koupit -->
+      <?php if ( $titbit_shop_url = get_field('produkty_titbiteshop') ) : ?>
+        <div class="produktDetail__section">
+          <h4 class="produktDetail__section__cart">
+            <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.2899 5.16935H10.9531V4.31449C10.9531 1.93477 9.17926 0 6.99742 0C4.81558 0 3.04168 1.93477 3.04168 4.31449V5.16935H0.7049C0.314995 5.16935 0 5.47434 0 5.85176V17.6103C0 18.9277 1.10769 20 2.46847 20H11.5315C12.8923 20 14 18.9277 14 17.6103V5.85176C14 5.47434 13.6849 5.16935 13.2951 5.16935H13.2899ZM4.44632 4.31449C4.44632 2.68718 5.59018 1.36486 6.99482 1.36486C8.39945 1.36486 9.54332 2.6897 9.54332 4.31449V5.16935H4.44632V4.31449ZM12.585 17.6103C12.585 18.1753 12.1099 18.6352 11.5263 18.6352H2.46327C1.87969 18.6352 1.40459 18.1753 1.40459 17.6103V6.53417H3.03908V8.10899C3.03908 8.48641 3.35407 8.79139 3.74398 8.79139C4.13388 8.79139 4.44888 8.48641 4.44888 8.10899V6.53417H9.54592V8.10899C9.54592 8.48641 9.86091 8.79139 10.2508 8.79139C10.6406 8.79139 10.9557 8.48641 10.9557 8.10899V6.53417H12.5902V17.6103H12.585Z" fill="#095352"/>
+            </svg>
+            Koupíte u nás
+          </h4>
+          <a href="<?php echo esc_url($titbit_shop_url); ?>" class="btn btn--primary" target="_blank" >
+            Jít nakupovat
+          </a>
+        </div>
+      <?php endif; ?>
 
       <!-- Kde koupit -->
       <?php 

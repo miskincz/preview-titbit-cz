@@ -45,6 +45,16 @@
       color: $color-primary;
       font-size: $font-size-small;
       font-weight: bold;
+      &.produktDetail__section__cart {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        svg {
+          flex-shrink: 0;
+          position: relative;
+          top: -1px;
+        }
+      }
     }
   }
 

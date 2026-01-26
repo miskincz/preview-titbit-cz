@@ -192,11 +192,14 @@ get_header(); ?>
             <article class="blogCard">
               <h4>články z titbit blogu</h4>
               <p>Jak se co jí a k čemu je to dobré?</p>
-              <?php if (has_post_thumbnail()): ?>
+              <?php if (has_post_thumbnail()): 
+                $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                if ($image_url):
+              ?>
                 <a href="<?php the_permalink(); ?>">
-                  <img src="<?php echo esc_url(get_the_post_thumbnail_url('product-main') ?: get_the_post_thumbnail_url('large') ?: get_the_post_thumbnail_url('medium') ?: get_the_post_thumbnail_url('thumbnail')); ?>" alt="<?php the_title(); ?>" width="750">
+                  <img src="<?php echo esc_url($image_url); ?>" alt="<?php the_title(); ?>" width="750">
                 </a>
-              <?php endif; ?>
+              <?php endif; endif; ?>
               <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
               <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
               <a href="<?php the_permalink(); ?>" class="btn btn--primary">Přečíst článek</a>
@@ -222,11 +225,14 @@ get_header(); ?>
         if ($recipe_query->have_posts()):
           while ($recipe_query->have_posts()): $recipe_query->the_post(); ?>
             <article>
-              <?php if (has_post_thumbnail()): ?>
+              <?php if (has_post_thumbnail()): 
+                $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                if ($image_url):
+              ?>
                 <a href="<?php the_permalink(); ?>">
-                  <img src="<?php echo esc_url(get_the_post_thumbnail_url('product-main') ?: get_the_post_thumbnail_url('large') ?: get_the_post_thumbnail_url('medium') ?: get_the_post_thumbnail_url('thumbnail')); ?>" alt="<?php the_title(); ?>" width="750">
+                  <img src="<?php echo esc_url($image_url); ?>" alt="<?php the_title(); ?>" width="750">
                 </a>
-              <?php endif; ?>
+              <?php endif; endif; ?>
               <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
               <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
               <a href="<?php the_permalink(); ?>" class="btn btn--block">Vyzkoušet recept</a>

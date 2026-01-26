@@ -212,8 +212,8 @@ add_action('parse_request', function($wp) {
 
 // Registrace skriptu pro AJAX "Načíst další"
 add_action('wp_enqueue_scripts', function(){
-  // Pouze JEDEN skript pro produkty i blog!
-  wp_enqueue_script('load-more', get_template_directory_uri().'/assets/js/load-more.js', ['jquery'], '1.0.4', true);
+  // Jediný skript pro produkty i blog!
+  wp_enqueue_script('load-more', get_template_directory_uri().'/assets/js/load-more.js', ['jquery'], '1.0.5', true);
   
   // Předání AJAX URL do JavaScriptu
   wp_localize_script('load-more', 'mytheme', [
@@ -242,11 +242,12 @@ function load_more_products() {
     'paged'          => $paged,
   ]);
   
+  $products_html = '';
   if ($query->have_posts()) {
     while ($query->have_posts()) {
       $query->the_post();
       
-      printf('<li><a href="%s">%s%s</a></li>',
+      $products_html .= sprintf('<li><a href="%s">%s%s</a></li>',
         get_permalink(),
         has_post_thumbnail() ? get_the_post_thumbnail(get_the_ID(),'medium',['class'=>'term-thumb']) : '',
         esc_html(get_the_title())
@@ -255,7 +256,12 @@ function load_more_products() {
     wp_reset_postdata();
   }
   
-  wp_die();
+  // Vrát JSON s produkty a informacemi o stránkování
+  wp_send_json([
+    'html' => $products_html,
+    'paged' => $paged,
+    'max_pages' => $query->max_num_pages
+  ]);
 }
 add_action('wp_ajax_load_more_products', 'load_more_products');
 add_action('wp_ajax_nopriv_load_more_products', 'load_more_products');

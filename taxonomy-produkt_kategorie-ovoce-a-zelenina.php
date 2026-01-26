@@ -101,7 +101,7 @@ get_header();
         ]);
         
         if ($query->have_posts()) {
-          echo '<div id="product-list" data-term="'. $term->term_id .'" data-page="1">';
+          echo '<div id="product-list" data-term="'. $term->term_id .'" data-page="'. $paged .'">';
           echo '<ul>';
           while ($query->have_posts()) { $query->the_post();
             printf('<li><a href="%s">%s%s</a></li>',
@@ -113,6 +113,57 @@ get_header();
           echo '</ul>';
           echo '</div>';
           
+          // Stránkování
+          if($query->max_num_pages > 1) {
+            $current_url = get_term_link($term);
+            $max_pages = $query->max_num_pages;
+            $pages_to_show = 5; // Vždy 5 prostředních stran
+            $range = floor($pages_to_show / 2); // 2
+            
+            // Dynamicky urči rozsah tak, aby bylo vždy 5 stran kolem aktuální
+            $start = max(1, $paged - $range);
+            $end = min($max_pages, $start + $pages_to_show - 1);
+            
+            // Pokud je end blízko maxu, posun start doleva
+            if ($end - $start + 1 < $pages_to_show) {
+              $start = max(1, $end - $pages_to_show + 1);
+            }
+            
+            echo '<nav class="pagination" aria-label="Stránkování produktů">';
+            
+            // Čísla stran
+            $last_printed = 0;
+            for ($i = 1; $i <= $max_pages; $i++) {
+              // Vždy zobrazuj: první, poslední, nebo v rozsahu
+              if (
+                $i == 1 || 
+                $i == $max_pages || 
+                ($i >= $start && $i <= $end)
+              ) {
+                // Přidej tři tečky pokud je mezera
+                if ($i > $last_printed + 1 && $last_printed > 0) {
+                  echo '<span class="pagination__dots">...</span>';
+                }
+                
+                $page_url = add_query_arg('paged', $i, $current_url);
+                $is_current = ($i === $paged);
+                $active_class = $is_current ? ' pagination__link--active' : '';
+                $aria_current = $is_current ? ' aria-current="page"' : '';
+                printf(
+                  '<a href="%s" class="pagination__link%s"%s>%d</a>',
+                  esc_url($page_url),
+                  $active_class,
+                  $aria_current,
+                  $i
+                );
+                $last_printed = $i;
+              }
+            }
+            
+            echo '</nav>';
+          }
+          
+          // Načíst další tlačítko
           if($query->max_num_pages > 1 && $paged < $query->max_num_pages) {
             echo '<div class="articlePage">';
             echo '<button id="load-more" class="btn" data-max-page="'. $query->max_num_pages .'">Načíst další</button>';

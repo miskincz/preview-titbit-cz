@@ -1,14 +1,11 @@
 jQuery(document).ready(function($) {
-    // ============================================
-    // STRÁNKOVÁNÍ A NAČÍTÁNÍ PRODUKTŮ
-    // ============================================
-    
-    // Stránkování s AJAX - klik na číslo strany
+    // Stránkování s AJAX
     $(document).on('click', '.pagination__link', function(e) {
         e.preventDefault();
         
         var link = $(this);
         var url = link.attr('href');
+        var page = link.text();
         var productList = $('#product-list');
         var termId = parseInt(productList.attr('data-term'));
         
@@ -44,7 +41,7 @@ jQuery(document).ready(function($) {
         });
     });
     
-    // "Načíst další" tlačítko
+    // "Načíst další" tlačítko - původní AJAX
     $(document).on('click', '#load-more', function() {
         var button = $(this);
         var productList = $('#product-list');
@@ -85,7 +82,7 @@ jQuery(document).ready(function($) {
         });
     });
     
-    // Regeneruj stránkování po AJAX
+    // Regeneruj stránkování
     function regeneratePagination(currentPage, maxPages) {
         var paginationNav = $('.pagination');
         if (paginationNav.length === 0) return;
@@ -119,46 +116,4 @@ jQuery(document).ready(function($) {
         
         paginationNav.html(html);
     }
-    
-    // ============================================
-    // BLOG PŘÍSPĚVKY
-    // ============================================
-    
-    // Načíst další blogové příspěvky
-    $('#load-more-blog').on('click', function() {
-        var button = $(this);
-        var blogList = $('#blog-list');
-        var categoryId = parseInt(blogList.attr('data-category'));
-        var currentPage = parseInt(blogList.attr('data-page'));
-        var maxPage = parseInt(button.attr('data-max-page'));
-        
-        button.text('Načítání...').prop('disabled', true);
-        
-        $.ajax({
-            url: mytheme.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'load_more_blog_posts',
-                category: categoryId,
-                page: currentPage
-            },
-            success: function(response) {
-                blogList.append(response);
-                
-                var newPage = currentPage + 1;
-                blogList.attr('data-page', newPage);
-                
-                if (newPage >= maxPage) {
-                    button.remove();
-                } else {
-                    button.text('Načíst další').prop('disabled', false);
-                }
-            },
-            error: function() {
-                button.text('Chyba - zkusit znovu').prop('disabled', false);
-            }
-        });
-    });
 });
-
-// SMAŽTE tento soubor - používáme load-more-posts.js

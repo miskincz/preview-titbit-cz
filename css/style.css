@@ -226,9 +226,10 @@ img {
 
 .btn--secondary {
   background-color: #FF087F;
-  color: #fff;
+  color: #EFEAE3;
 }
 .btn--secondary:hover {
+  color: #fff;
   background-color: rgb(236.7, 0, 114.0376518219);
 }
 
@@ -844,6 +845,43 @@ body .btn--eshop:hover::after {
   font-weight: 600;
 }
 
+/* Tooltip */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.tooltip-wrapper .tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+.tooltip-wrapper .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+.tooltip-wrapper:hover .tooltip, .tooltip-wrapper:focus-within .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
 [class^=block__] p:last-child {
   margin-bottom: 0;
 }
@@ -1043,6 +1081,8 @@ body .btn--eshop:hover::after {
   height: auto;
   background-color: white;
   border-radius: 16px;
+  position: sticky;
+  top: 1rem;
 }
 .mainOcCattegories__main__nav > ul {
   padding: 2rem;
@@ -1373,6 +1413,59 @@ blockquote.tiktok-embed > div {
     max-width: 100%;
   }
 }
+/* Stránkování */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.pagination__link {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #000;
+  transition: all 0.3s ease;
+  min-width: 44px;
+  text-align: center;
+}
+.pagination__link:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+.pagination__link--active {
+  background-color: #FF087F;
+  color: white;
+  border-color: #FF087F;
+  cursor: default;
+  font-weight: bold;
+}
+.pagination__link--active:hover {
+  background-color: #FF087F;
+  border-color: #FF087F;
+}
+.pagination__dots {
+  padding: 0 0.25rem;
+  color: #000;
+  font-weight: bold;
+}
+.pagination__arrow {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #FF087F;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+.pagination__arrow:hover {
+  background-color: #f0f0f0;
+  border-color: #FF087F;
+}
+
 .article {
   padding: 2rem;
   background-color: #fff;
@@ -1481,6 +1574,16 @@ blockquote.tiktok-embed > div {
   color: #095352;
   font-size: 14px;
   font-weight: bold;
+}
+.produktDetail__info h4.produktDetail__section__cart {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.produktDetail__info h4.produktDetail__section__cart svg {
+  flex-shrink: 0;
+  position: relative;
+  top: -1px;
 }
 .produktDetail__content-intro {
   font-size: 20px;
@@ -1783,11 +1886,69 @@ blockquote.tiktok-embed > div {
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .produktDetail__gallery .gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
+/* Video gallery items */
+.gallery-video {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #000;
 }
+.gallery-video .gallery-video__thumb {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.gallery-video .gallery-video__button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  color: #000;
+  z-index: 2;
+}
+.gallery-video .gallery-video__icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+}
+.gallery-video .gallery-video__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #333;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-video:hover .gallery-video__thumb {
+  transform: scale(1.1);
+}
+.gallery-video:hover .gallery-video__button {
+  background: rgb(255, 255, 255);
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
 .blogList {
   margin-top: 1.5rem;
 }
