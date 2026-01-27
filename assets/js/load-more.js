@@ -3,6 +3,24 @@ jQuery(document).ready(function($) {
     // STRÁNKOVÁNÍ A NAČÍTÁNÍ PRODUKTŮ
     // ============================================
     
+    // Inicializuj aktivní stránku při načtení
+    var productList = $('#product-list');
+    if (productList.length) {
+        var currentPage = parseInt(productList.attr('data-page')) || 1;
+        var paginationNav = $('.pagination');
+        if (paginationNav.length) {
+            // Nastav aktivní class na správném pagináčním linku
+            paginationNav.find('.pagination__link').each(function() {
+                var pageNum = parseInt($(this).text());
+                if (pageNum === currentPage) {
+                    $(this).addClass('pagination__link--active').attr('aria-current', 'page');
+                } else {
+                    $(this).removeClass('pagination__link--active').removeAttr('aria-current');
+                }
+            });
+        }
+    }
+    
     // Stránkování s AJAX - klik na číslo strany
     $(document).on('click', '.pagination__link', function(e) {
         e.preventDefault();
@@ -50,6 +68,13 @@ jQuery(document).ready(function($) {
         var productList = $('#product-list');
         var termId = parseInt(productList.attr('data-term'));
         var currentPage = parseInt(productList.attr('data-page')) || 1;
+        var maxPage = parseInt(button.attr('data-max-page')) || 1;
+        
+        // Pokud jsme na poslední stránce, neloaduj více
+        if (currentPage >= maxPage) {
+            button.remove();
+            return;
+        }
         
         button.text('Načítání...').prop('disabled', true);
         
@@ -131,6 +156,12 @@ jQuery(document).ready(function($) {
         var categoryId = parseInt(blogList.attr('data-category'));
         var currentPage = parseInt(blogList.attr('data-page'));
         var maxPage = parseInt(button.attr('data-max-page'));
+        
+        // Pokud jsme na poslední stránce, neloaduj více
+        if (currentPage >= maxPage) {
+            button.remove();
+            return;
+        }
         
         button.text('Načítání...').prop('disabled', true);
         

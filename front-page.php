@@ -176,8 +176,8 @@ get_header(); ?>
     </div>
   </div>
 
-  <div class="grid grid--col-2 grid--full-height">
-    <div>
+  <div class="grid grid--col-2 grid--col--center index__articleList">
+    
       <?php
         // Náhodný blog příspěvek
         $blog_query = new WP_Query([
@@ -202,46 +202,48 @@ get_header(); ?>
               <?php endif; endif; ?>
               <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
               <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
-              <a href="<?php the_permalink(); ?>" class="btn btn--primary">Přečíst článek</a>
+              <p><a href="<?php the_permalink(); ?>" class="btn btn--thirdary">Přečíst článek</a></p>
+              <a href="/clanky" class="btn btn--text" >Všechny články</a>
             </article>
           <?php endwhile;
           wp_reset_postdata();
         endif;
       ?>
-    </div>
-    <div>
-      <h4>inspirujte se od známých kuchařů</h4>
-      <p>Z našich surovin uvařeno pro vás</p>
-      <?php
-        // Náhodný recept
-        $recipe_query = new WP_Query([
-          'post_type' => 'post',
-          'category_name' => 'recepty',
-          'posts_per_page' => 1,
-          'orderby' => 'rand',
-          'cat' => 0 // Všechny kategorie (případně specifikuj ID kategorie pro recepty)
-        ]);
-        
-        if ($recipe_query->have_posts()):
-          while ($recipe_query->have_posts()): $recipe_query->the_post(); ?>
-            <article>
-              <?php if (has_post_thumbnail()): 
-                $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
-                if ($image_url):
-              ?>
-                <a href="<?php the_permalink(); ?>">
-                  <img src="<?php echo esc_url($image_url); ?>" alt="<?php the_title(); ?>" width="750">
-                </a>
-              <?php endif; endif; ?>
-              <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-              <p><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
-              <a href="<?php the_permalink(); ?>" class="btn btn--block">Vyzkoušet recept</a>
-            </article>
-          <?php endwhile;
-          wp_reset_postdata();
-        endif;
-      ?>
-    </div>
+   
+      <article class="blogCard blogCard--recepise">
+        <h4>inspirujte se od známých kuchařů</h4>
+        <p>Z našich surovin uvařeno pro vás</p>
+        <?php
+          // Náhodný recept
+          $recipe_query = new WP_Query([
+            'post_type' => 'post',
+            'category_name' => 'recepty',
+            'posts_per_page' => 1,
+            'orderby' => 'rand',
+            'cat' => 0 // Všechny kategorie (případně specifikuj ID kategorie pro recepty)
+          ]);
+          
+          if ($recipe_query->have_posts()):
+            while ($recipe_query->have_posts()): $recipe_query->the_post(); ?>
+              <article>
+                <?php if (has_post_thumbnail()): 
+                  $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+                  if ($image_url):
+                ?>
+                  <a href="<?php the_permalink(); ?>">
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php the_title(); ?>" width="750">
+                  </a>
+                <?php endif; endif; ?>
+                <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                <p><a href="<?php the_permalink(); ?>" class="btn btn--thirdary">Vyzkoušet recept</a></p>
+                <a href="/recepty" class="btn btn--text">Všechny recepty</a>
+              </article>
+            <?php endwhile;
+            wp_reset_postdata();
+          endif;
+        ?>
+      </article>
+   
   </div>
 
 </main><!-- .siteContainer -->

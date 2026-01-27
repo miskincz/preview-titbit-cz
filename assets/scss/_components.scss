@@ -2,9 +2,72 @@
 @use 'typography' as *;
 @use 'sass:color';
 // Komponenty (např. tlačítka, karty atd.)
-.pagination {
-    margin: 3rem 0 4rem 0;
+
+/* Stránkování */
+.pagePagination {
+  margin: 3rem 0 3rem 0;
+  display: flex; 
+  align-items: center;
+  position: relative;
+  gap: 1rem;
+  &__loadMore {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+  }
 }
+
+.pagination {
+  margin-left: auto;
+  align-items: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  &__link {
+    text-decoration: none;
+    color: $color-text;
+    text-align: center;
+    &:hover {
+      font-weight: bold;
+    }
+    
+    &--active {
+      cursor: default;
+      font-weight: bold;
+      
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+  
+  &__dots {
+    padding: 0 0.25rem;
+    color: $color-text;
+    font-weight: bold;
+  }
+  
+  &__arrow {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: $border-radius;
+    text-decoration: none;
+    color: $color-secondary;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    
+    &:hover {
+      background-color: #f0f0f0;
+      border-color: $color-secondary;
+    }
+  }
+}
+
+
 
 /*probox*/
 body div.asl_w {

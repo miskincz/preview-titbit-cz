@@ -112,8 +112,18 @@ get_header();
           }
           echo '</ul>';
           echo '</div>';
-          
+      ?>
+
+      <div class="pagePagination">
+        <?php  
           // Stránkování
+          // Načíst další tlačítko
+          if($query->max_num_pages > 1 && $paged < $query->max_num_pages) {
+            echo '<div class="pagePagination__loadMore">';
+            echo '<button id="load-more" class="btn" data-max-page="'. $query->max_num_pages .'">Načíst další</button>';
+            echo '</div>';
+          }
+
           if($query->max_num_pages > 1) {
             $current_url = get_term_link($term);
             $max_pages = $query->max_num_pages;
@@ -163,18 +173,14 @@ get_header();
             echo '</nav>';
           }
           
-          // Načíst další tlačítko
-          if($query->max_num_pages > 1 && $paged < $query->max_num_pages) {
-            echo '<div class="articlePage">';
-            echo '<button id="load-more" class="btn" data-max-page="'. $query->max_num_pages .'">Načíst další</button>';
-            echo '</div>';
-          }
+          
           
           wp_reset_postdata();
         } else {
           echo '<p>Žádné produkty v této kategorii ani jejích podkategoriích.</p>';
         }
         ?>
+      </div>
 
   </div><!-- .mainOcCattegories__main__list -->
 </div><!-- .mainOcCattegories__main -->

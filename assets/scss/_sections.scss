@@ -448,63 +448,20 @@ blockquote.tiktok-embed > div {
   }
 }
 
-/* Stránkování */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  
-  &__link {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: $border-radius;
-    text-decoration: none;
-    color: $color-text;
-    transition: all 0.3s ease;
-    min-width: 44px;
-    text-align: center;
-    
-    &:hover {
-      background-color: #f0f0f0;
-      border-color: #999;
-    }
-    
-    &--active {
-      background-color: $color-secondary;
-      color: white;
-      border-color: $color-secondary;
-      cursor: default;
-      font-weight: bold;
-      
-      &:hover {
-        background-color: $color-secondary;
-        border-color: $color-secondary;
-      }
-    }
+.index__articleList {
+  margin: 2rem 0;
+  .blogCard--recepise {
+    background-color: $color-third;
   }
-  
-  &__dots {
-    padding: 0 0.25rem;
+  .blogCard a {
     color: $color-text;
-    font-weight: bold;
-  }
-  
-  &__arrow {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: $border-radius;
     text-decoration: none;
-    color: $color-secondary;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    
-    &:hover {
-      background-color: #f0f0f0;
-      border-color: $color-secondary;
-    }
+  }
+  h3 {
+    @extend .title--h2;
+  }
+  h4 {
+    @extend .title--upper;
+    margin: 0 0 1rem 0;
   }
 }
-

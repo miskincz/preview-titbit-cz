@@ -25,7 +25,6 @@
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  background-color: $color-primary;
   color: #fff;
   border-radius: 50px;
   &:disabled,
@@ -54,6 +53,13 @@
     background-color: color.scale($color-secondary, $lightness: -10%);
   }
 }
+.btn--thirdary {
+  background-color: $color-primary;
+  color: #fff !important;
+  &:hover {
+    color: #fff !important;
+  }
+}
 
 .btn--block {
   display: inline-block;
@@ -65,6 +71,14 @@
     background-color: #fff !important;
     color: #000 !important;
     /*@include hoverArrowEffect;*/
+  }
+}
+.btn--text {
+  color: $color-text;
+  font-weight: bold;
+  text-decoration: underline !important;
+  &:hover {
+    text-decoration: none !important;
   }
 }
 
